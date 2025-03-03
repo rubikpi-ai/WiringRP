@@ -203,6 +203,7 @@ static char *extractStr (char *progName, char *p, char **str)
 static int doExtensionMcp23008 (char *progName, int pinBase, char *params)
 {
   int i2c ;
+  int busId = 1;
 
   if ((params = extractInt (progName, params, &i2c)) == NULL)
     return FALSE ;
@@ -213,7 +214,7 @@ static int doExtensionMcp23008 (char *progName, int pinBase, char *params)
     return FALSE ;
   }
 
-  mcp23008Setup (pinBase, i2c) ;
+  mcp23008Setup (pinBase, i2c, busId) ;
 
   return TRUE ;
 }
@@ -229,6 +230,7 @@ static int doExtensionMcp23008 (char *progName, int pinBase, char *params)
 static int doExtensionMcp23016 (char *progName, int pinBase, char *params)
 {
   int i2c ;
+  int busId = 1;
 
   if ((params = extractInt (progName, params, &i2c)) == NULL)
     return FALSE ;
@@ -239,7 +241,7 @@ static int doExtensionMcp23016 (char *progName, int pinBase, char *params)
     return FALSE ;
   }
 
-  mcp23016Setup (pinBase, i2c) ;
+  mcp23016Setup (pinBase, i2c, busId) ;
 
   return TRUE ;
 }
@@ -255,6 +257,7 @@ static int doExtensionMcp23016 (char *progName, int pinBase, char *params)
 static int doExtensionMcp23017 (char *progName, int pinBase, char *params)
 {
   int i2c ;
+  int busId = 1;
 
   if ((params = extractInt (progName, params, &i2c)) == NULL)
     return FALSE ;
@@ -265,7 +268,7 @@ static int doExtensionMcp23017 (char *progName, int pinBase, char *params)
     return FALSE ;
   }
 
-  mcp23017Setup (pinBase, i2c) ;
+  mcp23017Setup (pinBase, i2c, busId) ;
 
   return TRUE ;
 }
@@ -388,6 +391,7 @@ static int doExtensionSr595 (char *progName, int pinBase, char *params)
 static int doExtensionPcf8574 (char *progName, int pinBase, char *params)
 {
   int i2c ;
+  int busId = 1;
 
   if ((params = extractInt (progName, params, &i2c)) == NULL)
     return FALSE ;
@@ -398,7 +402,7 @@ static int doExtensionPcf8574 (char *progName, int pinBase, char *params)
     return FALSE ;
   }
 
-  pcf8574Setup (pinBase, i2c) ;
+  pcf8574Setup (pinBase, i2c, busId) ;
 
   return TRUE ;
 }
@@ -414,6 +418,7 @@ static int doExtensionPcf8574 (char *progName, int pinBase, char *params)
 static int doExtensionAds1115 (char *progName, int pinBase, char *params)
 {
   int i2c ;
+  int busId = 1;
 
   if ((params = extractInt (progName, params, &i2c)) == NULL)
     return FALSE ;
@@ -424,7 +429,7 @@ static int doExtensionAds1115 (char *progName, int pinBase, char *params)
     return FALSE ;
   }
 
-  ads1115Setup (pinBase, i2c) ;
+  ads1115Setup (pinBase, i2c, busId) ;
 
   return TRUE ;
 }
@@ -440,6 +445,7 @@ static int doExtensionAds1115 (char *progName, int pinBase, char *params)
 static int doExtensionPcf8591 (char *progName, int pinBase, char *params)
 {
   int i2c ;
+  int busId = 1;
 
   if ((params = extractInt (progName, params, &i2c)) == NULL)
     return FALSE ;
@@ -450,7 +456,7 @@ static int doExtensionPcf8591 (char *progName, int pinBase, char *params)
     return FALSE ;
   }
 
-  pcf8591Setup (pinBase, i2c) ;
+  pcf8591Setup (pinBase, i2c, busId) ;
 
   return TRUE ;
 }
@@ -480,7 +486,8 @@ static int doExtensionPseudoPins (UNU char *progName, int pinBase, UNU char *par
 
 static int doExtensionBmp180 (UNU char *progName, int pinBase, UNU char *params)
 {
-  bmp180Setup (pinBase) ;
+  int busId = 1;
+  bmp180Setup (pinBase, busId) ;
 
   return TRUE ;
 }
@@ -495,7 +502,8 @@ static int doExtensionBmp180 (UNU char *progName, int pinBase, UNU char *params)
 
 static int doExtensionHtu21d (UNU char *progName, int pinBase, UNU char *params)
 {
-  htu21dSetup (pinBase) ;
+  int busId = 1;
+  htu21dSetup (pinBase, busId) ;
 
   return TRUE ;
 }
@@ -676,7 +684,8 @@ static int doExtensionMcp4802 (char *progName, int pinBase, char *params)
 
 static int doExtensionSn3218 (UNU char *progName, int pinBase, UNU char *params)
 {
-  sn3218Setup (pinBase) ;
+  int busId = 1;
+  sn3218Setup (pinBase, busId) ;
   return TRUE ;
 }
 
@@ -691,6 +700,7 @@ static int doExtensionSn3218 (UNU char *progName, int pinBase, UNU char *params)
 static int doExtensionMcp3422 (char *progName, int pinBase, char *params)
 {
   int i2c, sampleRate, gain ;
+  int busId = 1;
 
   if ((params = extractInt (progName, params, &i2c)) == NULL)
     return FALSE ;
@@ -719,7 +729,7 @@ static int doExtensionMcp3422 (char *progName, int pinBase, char *params)
     return FALSE ;
   }
 
-  mcp3422Setup (pinBase, i2c, sampleRate, gain) ;
+  mcp3422Setup (pinBase, i2c, sampleRate, gain, busId) ;
 
   return TRUE ;
 }

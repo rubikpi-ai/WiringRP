@@ -185,13 +185,13 @@ static int myAnalogRead (struct wiringPiNodeStruct *node, int pin)
  *********************************************************************************
  */
 
-int bmp180Setup (const int pinBase)
+int bmp180Setup (const int pinBase, int busId)
 {
   double c3, c4, b1 ;
   int fd ;
   struct wiringPiNodeStruct *node ;
 
-  if ((fd = wiringPiI2CSetup (I2C_ADDRESS)) < 0)
+  if ((fd = wiringPiI2CSetup (I2C_ADDRESS, busId)) < 0)
     return FALSE ;
 
   node = wiringPiNewNode (pinBase, 4) ;

@@ -36,7 +36,8 @@
 extern "C" {
 #endif
 
-extern int mcp3422Setup (int pinBase, int i2cAddress, int sampleRate, int gain) ;
+extern int mcp3422Setup (int pinBase, int i2cAddress, int sampleRate, int gain, int busId) ;
+
 
 #ifdef __cplusplus
 }

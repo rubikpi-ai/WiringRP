@@ -118,6 +118,7 @@ fi
 
   echo
   echo "WiringPi Library"
+  mkdir -p /usr/local
   cd wiringPi
   $sudo make uninstall
   if [ x$1 = "xstatic" ]; then
@@ -135,6 +136,7 @@ fi
   echo "WiringPi Devices Library"
   cd ../devLib
   $sudo make uninstall
+
   if [ x$1 = "xstatic" ]; then
     make -j5 static
     check_make_ok

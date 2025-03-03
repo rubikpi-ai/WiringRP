@@ -105,9 +105,9 @@ void piGlowRing (const int ring, const int intensity)
  *********************************************************************************
  */
 
-void piGlowSetup (int clear)
+void piGlowSetup (int clear, int busId)
 {
-  sn3218Setup (PIGLOW_BASE) ;
+  sn3218Setup (PIGLOW_BASE, busId) ;
 
   if (clear)
   {

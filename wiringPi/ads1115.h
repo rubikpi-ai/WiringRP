@@ -48,7 +48,7 @@
 extern "C" {
 #endif
 
-extern int ads1115Setup (int pinBase, int i2cAddress) ;
+extern int ads1115Setup (int pinBase, int i2cAddress, int busId) ;
 
 #ifdef __cplusplus
 }

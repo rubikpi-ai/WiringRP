@@ -38,7 +38,7 @@ extern "C" {
 extern void piGlow1     (const int leg,  const int ring, const int intensity) ;
 extern void piGlowLeg   (const int leg,  const int intensity) ;
 extern void piGlowRing  (const int ring, const int intensity) ;
-extern void piGlowSetup (int clear) ;
+extern void piGlowSetup (int clear, int busId) ;
 
 #ifdef __cplusplus
 }

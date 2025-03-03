@@ -41,7 +41,7 @@ extern int wiringPiI2CWriteBlockData (int fd, int reg, const uint8_t *values, ui
 extern int wiringPiI2CRawWrite       (int fd, const uint8_t *values, uint8_t size);           //Interface 3.3
 
 extern int wiringPiI2CSetupInterface (const char *device, int devId) ;
-extern int wiringPiI2CSetup          (const int devId) ;
+extern int wiringPiI2CSetup          (const int devId, int busId);
 
 #ifdef __cplusplus
 }

@@ -49,12 +49,12 @@ static void myAnalogWrite (struct wiringPiNodeStruct *node, int pin, int value)
  *********************************************************************************
  */
 
-int sn3218Setup (const int pinBase)
+int sn3218Setup (const int pinBase, int busId)
 {
   int fd ;
   struct wiringPiNodeStruct *node ;
 
-  if ((fd = wiringPiI2CSetup (0x54)) < 0)
+  if ((fd = wiringPiI2CSetup (0x54, busId)) < 0)
     return FALSE ;
 
 // Setup the chip - initialise all 18 LEDs to off

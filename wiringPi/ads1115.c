@@ -272,12 +272,12 @@ static void myAnalogWrite (struct wiringPiNodeStruct *node, int pin, int data)
  *********************************************************************************
  */
 
-int ads1115Setup (const int pinBase, int i2cAddr)
+int ads1115Setup (const int pinBase, int i2cAddr, int busId)
 {
   struct wiringPiNodeStruct *node ;
   int fd ;
 
-  if ((fd = wiringPiI2CSetup (i2cAddr)) < 0)
+  if ((fd = wiringPiI2CSetup (i2cAddr, busId)) < 0)
     return FALSE ;
 
   node = wiringPiNewNode (pinBase, 8) ;

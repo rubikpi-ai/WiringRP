@@ -38,7 +38,7 @@ int wiringPiSPIClose     (const int channel); //Interface 3.5
 int wiringPiSPIxGetFd     (const int number, const int channel) ;
 int wiringPiSPIxDataRW    (const int number, const int channel, unsigned char *data, const int len) ;
 int wiringPiSPIxSetupMode (const int number, const int channel, const int speed, const int mode) ;
-int wiringPiSPIxSetup     (const int number, const int channel, const int speed) ;
+//int wiringPiSPIxSetup     (const int number, const int channel, const int speed) ;
 int wiringPiSPIxClose     (const int number, const int channel);
 
 #ifdef __cplusplus

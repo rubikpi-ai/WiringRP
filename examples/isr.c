@@ -42,7 +42,7 @@
 //	Global variable to count interrupts
 //	Should be declared volatile to make sure the compiler doesn't cache it.
 
-static volatile int globalCounter [8] ;
+static volatile int globalCounter [40] ;
 
 
 /*
@@ -58,6 +58,7 @@ void myInterrupt4 (void) { ++globalCounter [4] ; }
 void myInterrupt5 (void) { ++globalCounter [5] ; }
 void myInterrupt6 (void) { ++globalCounter [6] ; }
 void myInterrupt7 (void) { ++globalCounter [7] ; }
+void myInterrupt15 (void) { ++globalCounter [15] ; }
 
 
 /*
@@ -69,21 +70,22 @@ void myInterrupt7 (void) { ++globalCounter [7] ; }
 int main (void)
 {
   int gotOne, pin ;
-  int myCounter [8] ;
+  int myCounter [40] ;
 
-  for (pin = 0 ; pin < 8 ; ++pin) 
+  for (pin = 15 ; pin < 16 ; ++pin) 
     globalCounter [pin] = myCounter [pin] = 0 ;
 
   wiringPiSetup () ;
 
-  wiringPiISR (0, INT_EDGE_FALLING, &myInterrupt0) ;
+  /*wiringPiISR (0, INT_EDGE_FALLING, &myInterrupt0) ;
   wiringPiISR (1, INT_EDGE_FALLING, &myInterrupt1) ;
   wiringPiISR (2, INT_EDGE_FALLING, &myInterrupt2) ;
   wiringPiISR (3, INT_EDGE_FALLING, &myInterrupt3) ;
   wiringPiISR (4, INT_EDGE_FALLING, &myInterrupt4) ;
   wiringPiISR (5, INT_EDGE_FALLING, &myInterrupt5) ;
   wiringPiISR (6, INT_EDGE_FALLING, &myInterrupt6) ;
-  wiringPiISR (7, INT_EDGE_FALLING, &myInterrupt7) ;
+  wiringPiISR (7, INT_EDGE_FALLING, &myInterrupt7) ;*/
+  wiringPiISR (15, INT_EDGE_FALLING, &myInterrupt15) ;
 
   for (;;)
   {
@@ -92,7 +94,7 @@ int main (void)
 
     for (;;)
     {
-      for (pin = 0 ; pin < 8 ; ++pin)
+      for (pin = 15 ; pin < 16 ; ++pin)
       {
 	if (globalCounter [pin] != myCounter [pin])
 	{
@@ -101,8 +103,10 @@ int main (void)
 	  ++gotOne ;
 	}
       }
-      if (gotOne != 0)
+    if (gotOne != 0)
 	break ;
+
+    delay(1000);
     }
   }
 

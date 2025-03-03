@@ -118,7 +118,7 @@ int softToneCreate (int pin)
   if (threads [pin] != 0)
     return -1 ;
 
-  freqs [pin] = 0 ;
+  freqs [pin] = 262 ;
 
   newPin = pin ;
   res    = pthread_create (&myThread, NULL, softToneThread, NULL) ;

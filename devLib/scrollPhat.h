@@ -36,4 +36,4 @@ extern void scrollPhatPrintf     (const char *message, ...) ;
 extern void scrollPhatPrintSpeed (const int cps10) ;
 
 extern void scrollPhatIntensity  (const int percent) ;
-extern int  scrollPhatSetup      (void) ;
+extern int  scrollPhatSetup      (int busId) ;

@@ -73,7 +73,7 @@ char *usage = "Usage: gpio -v\n"
               "       gpio <toggle/blink> <pin>\n"
 	      "       gpio readall\n"
 	      "       gpio wfi <pin> <mode>\n"
-	      "       gpio drive <group> <value>\n"
+	      "       gpio drivepin <pin> <value>\n"
 	      "       gpio pwm-bal/pwm-ms \n"
 	      "       gpio pwmr <range> \n"
 	      "       gpio pwmc <divider> \n"
@@ -113,9 +113,11 @@ static int decodePin (const char *str)
  *********************************************************************************
  */
 
-static void doI2Cdetect (const char *progName)
+static void doI2Cdetect (int argc, char *argv[])
 {
-  int port = piGpioLayout () == GPIO_LAYOUT_PI1_REV1 ? 0 : 1 ;
+  char *progName = argv[1];
+  //int port = piGpioLayout () == GPIO_LAYOUT_PI1_REV1 ? 0 : 1 ;
+  int port = (int)strtol (argv [2], NULL, 0) ;
   char command[64];
 
   snprintf(command, 64, "i2cdetect -y %d", port);
@@ -296,19 +298,26 @@ void doMode (int argc, char *argv [])
   else if (strcasecmp (mode, "input")   == 0) pinMode         (pin, INPUT) ;
   else if (strcasecmp (mode, "out")     == 0) pinMode         (pin, OUTPUT) ;
   else if (strcasecmp (mode, "output")  == 0) pinMode         (pin, OUTPUT) ;
-  else if (strcasecmp (mode, "pwm")     == 0) pinMode         (pin, PWM_OUTPUT) ;
-  else if (strcasecmp (mode, "pwmTone") == 0) pinMode         (pin, PWM_TONE_OUTPUT) ;
+  //else if (strcasecmp (mode, "pwm")     == 0) pinMode         (pin, PWM_OUTPUT) ;
+  //else if (strcasecmp (mode, "pwmTone") == 0) pinMode         (pin, PWM_TONE_OUTPUT) ;
+  else if (strcasecmp (mode, "pwm")     == 0) { pinMode         (pin, SOFT_PWM_OUTPUT) ;
+	while(1) delay(1000);
+  }
+  else if (strcasecmp (mode, "pwmTone") == 0) { pinMode         (pin, SOFT_TONE_OUTPUT) ;
+	while(1) delay(1000);
+  }
   else if (strcasecmp (mode, "clock")   == 0) pinMode         (pin, GPIO_CLOCK) ;
   else if (strcasecmp (mode, "up")      == 0) pullUpDnControl (pin, PUD_UP) ;
   else if (strcasecmp (mode, "down")    == 0) pullUpDnControl (pin, PUD_DOWN) ;
   else if (strcasecmp (mode, "tri")     == 0) pullUpDnControl (pin, PUD_OFF) ;
   else if (strcasecmp (mode, "off")     == 0) pullUpDnControl (pin, PUD_OFF) ;
-  else if (strcasecmp (mode, "alt0")    == 0) pinModeAlt (pin, 0b100) ;
-  else if (strcasecmp (mode, "alt1")    == 0) pinModeAlt (pin, 0b101) ;
-  else if (strcasecmp (mode, "alt2")    == 0) pinModeAlt (pin, 0b110) ;
-  else if (strcasecmp (mode, "alt3")    == 0) pinModeAlt (pin, 0b111) ;
-  else if (strcasecmp (mode, "alt4")    == 0) pinModeAlt (pin, 0b011) ;
-  else if (strcasecmp (mode, "alt5")    == 0) pinModeAlt (pin, 0b010) ;
+  //else if (strcasecmp (mode, "alt0")    == 0) pinModeAlt (pin, 0) ;
+  else if (strcasecmp (mode, "alt1")    == 0) pinModeAlt (pin, 1) ;
+  else if (strcasecmp (mode, "alt2")    == 0) pinModeAlt (pin, 2) ;
+  else if (strcasecmp (mode, "alt3")    == 0) pinModeAlt (pin, 3) ;
+  else if (strcasecmp (mode, "alt4")    == 0) pinModeAlt (pin, 4) ;
+  else if (strcasecmp (mode, "alt5")    == 0) pinModeAlt (pin, 5) ;
+  else if (strcasecmp (mode, "alt6")    == 0) pinModeAlt (pin, 6) ;
   else
   {
     fprintf (stderr, "%s: Invalid mode: %s. Should be in/out/pwm/clock/up/down/tri\n", argv [1], mode) ;
@@ -334,13 +343,13 @@ static void doPadDrivePin (int argc, char *argv [])
   int pin = atoi (argv [2]) ;
   int val = atoi (argv [3]) ;
 
-  if ((pin < 0) || (pin > 27)) {
-    fprintf (stderr, "%s: drive pin not 0-27: %d\n", argv [0], pin) ;
+  if ((pin < 1) || (pin > 41)) {
+    fprintf (stderr, "%s: drive pin not 1-40: %d\n", argv [0], pin) ;
     exit (1) ;
   }
 
-  if ((val < 0) || (val > 3)) {
-    fprintf (stderr, "%s: drive value not 0-3: %d\n", argv [0], val) ;
+  if ((val < 0) || (val > 7)) {
+    fprintf (stderr, "%s: drive value not 0-7: %d", argv [0], val) ;
     exit (1) ;
   }
 
@@ -841,11 +850,12 @@ static void doVersion (char *argv [])
   int vMaj, vMin ;
 
   wiringPiVersion (&vMaj, &vMin) ;
-  printf ("gpio version: %d.%d\n", vMaj, vMin) ;
+  printf ("gpio version: %d.%d (Alpha)\n", vMaj, vMin) ;
   printf ("Copyright (c) 2012-2025 Gordon Henderson and contributors\n") ;
   printf ("This is free software with ABSOLUTELY NO WARRANTY.\n") ;
   printf ("For details type: %s -warranty\n", argv [0]) ;
   printf ("\n") ;
+#if 0
   piBoardId (&model, &rev, &mem, &maker, &warranty) ;
 
   printf ("Hardware details:\n") ;
@@ -893,7 +903,7 @@ static void doVersion (char *argv [])
   if (wiringPiGpioDeviceGetFd()>0) {
     printf ("  * Supports basic user-level GPIO access via /dev/gpiochip (slow).\n") ;
   }
-
+#endif
 }
 
 
@@ -940,7 +950,8 @@ int main (int argc, char *argv [])
 
   if ((strcmp (argv [1], "-R") == 0) || (strcmp (argv [1], "-V") == 0))
   {
-    printf ("%d\n", piGpioLayout ()) ;
+    // printf ("%d\n", piGpioLayout ()) ;
+    doVersion (argv) ;
     exit (EXIT_SUCCESS) ;
   }
 
@@ -1061,7 +1072,7 @@ int main (int argc, char *argv [])
   else
   {
     wiringPiSetup () ;
-    wpMode = WPI_MODE_PINS ;
+    wpMode = WPI_MODE_PHYS ;
   }
 
 // Check for -x argument to load in a new extension
@@ -1123,8 +1134,8 @@ int main (int argc, char *argv [])
   else if (strcasecmp (argv [1], "nreadall" ) == 0) doReadall    () ;
   else if (strcasecmp (argv [1], "pins"     ) == 0) doReadall    () ;
   else if (strcasecmp (argv [1], "qmode"    ) == 0) doQmode      (argc, argv) ;
-  else if (strcasecmp (argv [1], "i2cdetect") == 0) doI2Cdetect  (argv [0]) ;
-  else if (strcasecmp (argv [1], "i2cd"     ) == 0) doI2Cdetect  (argv [0]) ;
+  else if (strcasecmp (argv [1], "i2cdetect") == 0) doI2Cdetect  (argc, argv) ;
+  else if (strcasecmp (argv [1], "i2cd"     ) == 0) doI2Cdetect  (argc, argv) ;
   else if (strcasecmp (argv [1], "reset"    ) == 0) doReset      (argv [0]) ;
   else if (strcasecmp (argv [1], "wb"       ) == 0) doWriteByte  (argc, argv) ;
   else if (strcasecmp (argv [1], "rbx"      ) == 0) doReadByte   (argc, argv, TRUE) ;

@@ -45,12 +45,18 @@
 static const uint8_t     spiBPW   = 8 ;
 static const uint16_t    spiDelay = 0 ;
 //https://datasheets.raspberrypi.com/cm4/cm4-datasheet.pdf
-const uint8_t     WPI_MaxSPINumbers   = 7 ;
-const uint8_t     WPI_MaxSPIChannels  = 3 ;
+const uint8_t     WPI_MaxSPINumbers   = 13 ;
+const uint8_t     WPI_MaxSPIChannels  = 13 ;
+#define SPI_BUS_ID  12
 
-
-static uint32_t    spiSpeeds [7][3] =
+static uint32_t    spiSpeeds [][3] =
 {
+ {0, 0, 0},
+ {0, 0, 0},
+ {0, 0, 0},
+ {0, 0, 0},
+ {0, 0, 0},
+ {0, 0, 0},
  {0, 0, 0},
  {0, 0, 0},
  {0, 0, 0},
@@ -60,8 +66,14 @@ static uint32_t    spiSpeeds [7][3] =
  {0, 0, 0},
 };
 
-static int         spiFds [7][3] =
+static int         spiFds [][3] =
 {
+ {-1, -1, -1},
+ {-1, -1, -1},
+ {-1, -1, -1},
+ {-1, -1, -1},
+ {-1, -1, -1},
+ {-1, -1, -1},
  {-1, -1, -1},
  {-1, -1, -1},
  {-1, -1, -1},
@@ -103,7 +115,7 @@ int wiringPiSPIxGetFd(const int number, int channel)
 }
 
 int wiringPiSPIGetFd(int channel) {
-  return wiringPiSPIxGetFd(0, channel);
+  return wiringPiSPIxGetFd(SPI_BUS_ID, channel);
 }
 
 
@@ -141,7 +153,7 @@ int wiringPiSPIxDataRW (const int number, const int channel, unsigned char *data
 }
 
 int wiringPiSPIDataRW (int channel, unsigned char *data, int len) {
-  return wiringPiSPIxDataRW(0, channel, data, len);
+  return wiringPiSPIxDataRW(SPI_BUS_ID, channel, data, len);
 }
 
 /*
@@ -185,7 +197,7 @@ int wiringPiSPIxSetupMode(const int number, const int channel, const int speed, 
 
 
 int wiringPiSPISetupMode (int channel, int speed, int mode) {
- return wiringPiSPIxSetupMode (0, channel, speed, mode);
+ return wiringPiSPIxSetupMode (SPI_BUS_ID, channel, speed, mode);
 }
 
 
@@ -196,7 +208,7 @@ int wiringPiSPISetupMode (int channel, int speed, int mode) {
  */
 
 int wiringPiSPISetup (int channel, int speed) {
-  return wiringPiSPIxSetupMode(0, channel, speed, 0) ;
+  return wiringPiSPIxSetupMode(SPI_BUS_ID, channel, speed, 0) ;
 }
 
 
@@ -212,6 +224,6 @@ int wiringPiSPIxClose (const int number, const int channel) {
 }
 
 int wiringPiSPIClose (const int channel) {
-  return wiringPiSPIxClose (0, channel);
+  return wiringPiSPIxClose (SPI_BUS_ID, channel);
 }
 

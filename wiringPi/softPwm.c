@@ -157,7 +157,7 @@ int softPwmCreate (int pin, int initialValue, int pwmRange)
     return res ;
   
   while (newPin != -1)
-    delay (1) ;
+    delay (1000) ;
 
   threads [pin] = myThread ;
 
