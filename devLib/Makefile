@@ -22,8 +22,7 @@
 #################################################################################
 
 VERSION=$(shell cat ../VERSION)
-DESTDIR?=/usr
-PREFIX?=/local
+DESTDIR?=/
 
 LDCONFIG?=ldconfig
 
@@ -37,7 +36,7 @@ DYNAMIC=libwiringPiDev.so.$(VERSION)
 #DEBUG	= -g -O0
 DEBUG	= -O2
 CC	?= gcc
-INCLUDE	= -I.
+INCLUDE	= -I$(DESTDIR)/usr/include
 DEFS	= -D_GNU_SOURCE
 CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC $(EXTRA_CFLAGS)
 
@@ -88,22 +87,25 @@ tags:	$(SRC)
 .PHONY:	install
 install:	$(DYNAMIC)
 	$Q echo "[Install Headers]"
-	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/include
-	$Q install -m 0644 $(HEADERS)					$(DESTDIR)$(PREFIX)/include
+	$Q mkdir -p $(DESTDIR)/usr/include
+	$Q mkdir -p $(DESTDIR)/usr/lib
+	$Q mkdir -p $(DESTDIR)/lib
+	$Q install -m 0755 -d						$(DESTDIR)/usr/include
+	$Q install -m 0644 $(HEADERS)					$(DESTDIR)/usr/include
 	$Q echo "[Install Dynamic Lib]"
-	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
-	$Q install -m 0755 libwiringPiDev.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so.$(VERSION)
-	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so.$(VERSION)	$(DESTDIR)/lib/libwiringPiDev.so
+	$Q install -m 0755 -d						$(DESTDIR)/usr/lib
+	$Q install -m 0755 libwiringPiDev.so.$(VERSION)			$(DESTDIR)/usr/lib/libwiringPiDev.so.$(VERSION)
+	$Q cd $(DESTDIR)/usr/lib && ln -sf libwiringPiDev.so.$(VERSION) libwiringPiDev.so
 	$Q $(LDCONFIG)
 
 .PHONY:	install-static
 install-static:	$(STATIC)
 	$Q echo "[Install Headers]"
-	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/include
-	$Q install -m 0644 $(HEADERS)					$(DESTDIR)$(PREFIX)/include
+	$Q install -m 0755 -d						$(DESTDIR)/usr/include
+	$Q install -m 0644 $(HEADERS)					$(DESTDIR)/usr/include
 	$Q echo "[Install Static Lib]"
-	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
-	$Q install -m 0755 libwiringPiDev.a				$(DESTDIR)$(PREFIX)/lib
+	$Q install -m 0755 -d						$(DESTDIR)/usr/lib
+	$Q install -m 0755 libwiringPiDev.a				$(DESTDIR)/usr/lib
 
 .PHONY: check-deb-destdir
 check-deb-destdir:
@@ -124,8 +126,10 @@ install-deb:	$(DYNAMIC) check-deb-destdir
 .PHONY:	uninstall
 uninstall:
 	$Q echo "[UnInstall]"
-	$Q cd $(DESTDIR)$(PREFIX)/include/ && rm -f $(HEADERS)
-	$Q cd $(DESTDIR)$(PREFIX)/lib/     && rm -f libwiringPiDev.*
+	$Q mkdir -p $(DESTDIR)/usr/include
+	$Q mkdir -p $(DESTDIR)/usr/lib
+	$Q cd $(DESTDIR)/usr/include/ && rm -f $(HEADERS)
+	$Q cd $(DESTDIR)/usr/lib/     && rm -f libwiringPiDev.*
 	$Q $(LDCONFIG)
 
 

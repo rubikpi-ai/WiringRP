@@ -1,6 +1,5 @@
-wiringpi (2.26~iwj) rpi-unstable; urgency=low
+wiringrp (1.0.1-1) UNRELEASED; urgency=medium
 
-  * Initial version with real Debian source package build.
+  * Initial release.
 
- -- Ian Jackson <ijackson@chiark.greenend.org.uk>  Sat, 12 Sep 2015 18:31:35 +0100
-
+ -- Hongyang Zhao <hongyang.zhao@thundersoft.com>  Mon, 07 Jul 2025 15:35:37 +0800

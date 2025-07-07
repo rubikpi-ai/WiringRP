@@ -1,3 +1,21 @@
+# For WiringRP
+## build and install
+```shell
+make
+```
+or
+```shell
+DESTDIR=/your/custom/path make
+```
+## build deb binary packages
+```
+fakeroot debian/rules binary
+```
+## build deb source packages
+```shell
+make source
+```
+------------------------------------
 # WiringPi Library
 Welcome to the WiringPi Library, the highly performant GPIO access library for Raspberry Pi boards. This library is written in C and is designed to provide fast and efficient control of the GPIO pins by directly accessing the hardware registers using DMA. 
 

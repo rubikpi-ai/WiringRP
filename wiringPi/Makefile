@@ -22,8 +22,7 @@
 #################################################################################
 
 VERSION=$(shell cat ../VERSION)
-DESTDIR?=/usr
-PREFIX?=/local
+DESTDIR?=/
 
 LDCONFIG?=ldconfig
 
@@ -97,12 +96,16 @@ tags:	$(SRC)
 .PHONY:	install
 install:	$(DYNAMIC)
 	$Q echo "[Install Headers]"
-	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/include
-	$Q install -m 0644 $(HEADERS)					$(DESTDIR)$(PREFIX)/include
+	$Q mkdir -p $(DESTDIR)/usr/include
+	$Q mkdir -p $(DESTDIR)/usr/lib
+	$Q mkdir -p $(DESTDIR)/lib
+	$Q install -m 0755 -d						$(DESTDIR)/usr/include
+	$Q install -m 0644 $(HEADERS)					$(DESTDIR)/usr/include
 	$Q echo "[Install Dynamic Lib]"
-	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
-	$Q install -m 0755 libwiringPi.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)
-	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)	$(DESTDIR)/lib/libwiringPi.so
+	$Q install -m 0755 -d						$(DESTDIR)/usr/lib
+	$Q install -m 0755 libwiringPi.so.$(VERSION)			$(DESTDIR)/usr/lib/libwiringPi.so.$(VERSION)
+	$Q cd $(DESTDIR)/usr/lib && ln -sf libwiringPi.so.$(VERSION) libwiringPi.so
+	$Q cd -
 	$Q $(LDCONFIG)
 
 .PHONY: check-deb-destdir
@@ -124,8 +127,10 @@ install-deb:	$(DYNAMIC) check-deb-destdir
 .PHONY:	uninstall
 uninstall:
 	$Q echo "[UnInstall]"
-	$Q cd $(DESTDIR)$(PREFIX)/include/ && rm -f $(HEADERS)
-	$Q cd $(DESTDIR)$(PREFIX)/lib/     && rm -f libwiringPi.*
+	$Q mkdir -p $(DESTDIR)/usr/include
+	$Q mkdir -p $(DESTDIR)/usr/lib
+	$Q cd $(DESTDIR)/usr/include/ && rm -f $(HEADERS)
+	$Q cd $(DESTDIR)/usr/lib/     && rm -f libwiringPi.*
 	$Q $(LDCONFIG)
 
 

@@ -23,8 +23,7 @@
 #    along with wiringPi.  If not, see <http://www.gnu.org/licenses/>.
 #################################################################################
 
-DESTDIR?=/usr
-PREFIX?=/local
+DESTDIR?=/
 
 ifneq ($V,1)
 Q ?= @
@@ -33,10 +32,10 @@ endif
 #DEBUG	= -g -O0
 DEBUG	= -O2
 CC	?= gcc
-INCLUDE	= -I$(DESTDIR)$(PREFIX)/include
+INCLUDE	= -I$(DESTDIR)/usr/include
 CFLAGS	= $(DEBUG) -Wall -Wextra $(INCLUDE) -Winline -pipe $(EXTRA_CFLAGS)
 
-LDFLAGS	= -L$(DESTDIR)$(PREFIX)/lib
+LDFLAGS	= -L$(DESTDIR)/usr/lib
 LIBS    = -lwiringPi -lwiringPiDev -lpthread -lrt -lm -lcrypt
 
 # May not need to  alter anything below this line
@@ -72,14 +71,16 @@ tags:	$(SRC)
 .PHONY:	install
 install: gpio
 	$Q echo "[Install]"
-	$Q mkdir -p		$(DESTDIR)$(PREFIX)/bin
-	$Q cp gpio		$(DESTDIR)$(PREFIX)/bin
+	$Q mkdir -p $(DESTDIR)/usr/bin
+	$Q mkdir -p $(DESTDIR)/usr/share/man/man1
+	$Q mkdir -p		$(DESTDIR)/usr/bin
+	$Q cp gpio		$(DESTDIR)/usr/bin
 ifneq ($(WIRINGPI_SUID),0)
-	$Q chown root:root	$(DESTDIR)$(PREFIX)/bin/gpio
-	$Q chmod 4755		$(DESTDIR)$(PREFIX)/bin/gpio
+	$Q chown root:root	$(DESTDIR)/usr/bin/gpio
+	$Q chmod 4755		$(DESTDIR)/usr/bin/gpio
 endif
-	$Q mkdir -p		$(DESTDIR)$(PREFIX)/share/man/man1
-	$Q cp gpio.1		$(DESTDIR)$(PREFIX)/share/man/man1
+	$Q mkdir -p		$(DESTDIR)/usr/share/man/man1
+	$Q cp gpio.1		$(DESTDIR)/usr/share/man/man1
 
 .PHONY: check-deb-destdir
 check-deb-destdir:
@@ -98,8 +99,10 @@ install-deb:	gpio check-deb-destdir
 .PHONY:	uninstall
 uninstall:
 	$Q echo "[UnInstall]"
-	$Q rm -f $(DESTDIR)$(PREFIX)/bin/gpio
-	$Q rm -f $(DESTDIR)$(PREFIX)/share/man/man1/gpio.1
+	$Q mkdir -p $(DESTDIR)/usr/bin
+	$Q mkdir -p $(DESTDIR)/usr/share/man/man1
+	$Q rm -f $(DESTDIR)/usr/bin/gpio
+	$Q rm -f $(DESTDIR)/usr/share/man/man1/gpio.1
 
 .PHONY:	depend
 depend:
